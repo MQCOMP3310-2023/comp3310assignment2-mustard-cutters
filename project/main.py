@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import Restaurant, MenuItem
 from sqlalchemy import asc
+from flask_login import login_required, current_user
 from . import db
 
 main = Blueprint('main', __name__)
@@ -11,6 +12,7 @@ main = Blueprint('main', __name__)
 def showRestaurants():
   restaurants = db.session.query(Restaurant).order_by(asc(Restaurant.name))
   return render_template('restaurants.html', restaurants = restaurants)
+
 
 #Create a new restaurant
 @main.route('/restaurant/new/', methods=['GET','POST'])
