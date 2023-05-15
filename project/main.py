@@ -13,6 +13,11 @@ def showRestaurants():
   restaurants = db.session.query(Restaurant).order_by(asc(Restaurant.name))
   return render_template('restaurants.html', restaurants = restaurants)
 
+#profile
+@main.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html', name=current_user.name)
 
 #Create a new restaurant
 @main.route('/restaurant/new/', methods=['GET','POST'])
