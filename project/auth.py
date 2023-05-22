@@ -47,7 +47,6 @@ def signup_post():
         current_app.logger.debug("User email already exists")
         return redirect(url_for('auth.signup'))
 
-    # new_user = User(email=email, name=name, password=password)
     new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
 
     # add the new user to the database
