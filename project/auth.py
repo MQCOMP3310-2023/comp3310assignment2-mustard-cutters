@@ -46,6 +46,11 @@ def signup_post():
     password = request.form.get('password')
     role = request.form.get('role')
 
+    valid_roles = [role for role, _ in User.ROLES]
+    if role not in valid_roles:
+        flash('Invalid role selected.')
+        return redirect(url_for('auth.signup'))
+
     user = User.query.filter_by(email=email).first()
     if user: 
         flash('Email address already exists')  # 'flash' function stores a message accessible in the template code.

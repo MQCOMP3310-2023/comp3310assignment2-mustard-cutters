@@ -8,6 +8,13 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(1000))
     role = db.Column(db.String(50))
 
+    # Define Roles
+    ROLES = [
+        ('admin', 'Admin'),
+        ('restaurant_owner', 'Restaurant Owner'),
+        ('public_user', 'Public User')
+    ]
+
     @property
     def serialize(self):
        """Return object data in easily serializeable format"""
