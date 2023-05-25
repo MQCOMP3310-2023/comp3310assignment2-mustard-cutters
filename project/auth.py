@@ -37,7 +37,7 @@ def login_post():
 
 @auth.route('/signup')
 def signup():
-    return render_template('signup.html')
+    return render_template('signup.html', User=User)
 
 @auth.route('/signup', methods=['POST'])
 def signup_post():
@@ -45,11 +45,6 @@ def signup_post():
     name = request.form.get('name')
     password = request.form.get('password')
     role = request.form.get('role')
-
-    valid_roles = [role for role, _ in User.ROLES]
-    if role not in valid_roles:
-        flash('Invalid role selected.')
-        return redirect(url_for('auth.signup'))
 
     user = User.query.filter_by(email=email).first()
     if user: 
