@@ -6,6 +6,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
+    role = db.Column(db.String(50))
 
     @property
     def serialize(self):
@@ -13,8 +14,9 @@ class User(UserMixin, db.Model):
        return {
            'id'         : self.id,
            'email'      : self.email,
-           'password'   :self.password,
-           'name'       :self.name,
+           'password'   : self.password,
+           'name'       : self.name,
+           'role'       : self.role
        }
 
 class Restaurant(db.Model):

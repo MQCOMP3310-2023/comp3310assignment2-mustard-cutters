@@ -26,9 +26,14 @@ def login_post():
         current_app.logger.warning("User login failed")
         return redirect(url_for('auth.login')) # if the user doesn't exist or password is wrong, reload the page
 
+    # get the user role
+    role = user.role
+
     # if the above check passes, then we know the user has the right credentials
     login_user(user, remember=remember)
-    return redirect(url_for('main.profile'))
+    return redirect(url_for('main.showRestaurants'))
+                    
+                    
 
 @auth.route('/signup')
 def signup():
@@ -39,7 +44,7 @@ def signup_post():
     email = request.form.get('email')
     name = request.form.get('name')
     password = request.form.get('password')
-
+    role = request.form.get('role')
 
     user = User.query.filter_by(email=email).first()
     if user: 
@@ -47,7 +52,7 @@ def signup_post():
         current_app.logger.debug("User email already exists")
         return redirect(url_for('auth.signup'))
 
-    new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
+    new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'), role=role)
 
     # add the new user to the database
     db.session.add(new_user)
