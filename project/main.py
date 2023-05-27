@@ -23,7 +23,7 @@ def profile():
 @main.route('/restaurant/new/', methods=['GET','POST'])
 def newRestaurant():
     if request.method == 'POST':
-      newRestaurant = Restaurant(name = request.form['name'])
+      newRestaurant = Restaurant(name = request.form['name'], ownerID = current_user.id), 
       db.session.add(newRestaurant)
       flash('New Restaurant %s Successfully Created' % newRestaurant.name)
       db.session.commit()
