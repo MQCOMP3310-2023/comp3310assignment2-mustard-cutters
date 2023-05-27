@@ -5,7 +5,7 @@
 <h1 class="title">
   Welcome, {{ name }}!
 </h1>
-<!--
+
 <div class="column is-4 is-offset-4">
   <h3 class="title">Change User Password</h3>
   <div class="box">
@@ -34,7 +34,7 @@
 </div>
 
 {% for user in user %}
-		<a href = "{{url_for('auth.adminfunctions')}}">
+		<a href = "{{url_for('main.showMenu', restaurant_id = restaurant.id)}}">
 			<div class="row">
 				<div class="col-md-1"></div>
 					<div class="col-md-10 restaurant-list">
@@ -44,5 +44,4 @@
 			</div>
 		</a>
 	{% endfor %}
-  -->
 {% endblock %}   

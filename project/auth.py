@@ -11,6 +11,25 @@ auth = Blueprint('auth', __name__)
 def login():
     return render_template('login.html')
 
+"""
+@auth.route('/adminfunctions/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])
+def adminfunctions(user):
+    editUser = User.query.filter_by(email=email).first()
+    return render_template('adminfunctions.html')
+
+@main.route('/restaurant/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])
+def editRestaurant(restaurant_id):
+    editedRestaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
+    if request.method == 'POST':
+      if request.form['name']:
+        editedRestaurant.name = request.form['name']
+        db.session.add(editedRestaurant)
+        db.session.commit() 
+        flash('Restaurant Successfully Edited %s' % editedRestaurant.name)
+        return redirect(url_for('main.showRestaurants'))
+    else:
+        return render_template('editRestaurant.html', restaurant = editedRestaurant)
+"""
 @auth.route('/login', methods=['POST'])
 def login_post():
     email = request.form.get('email')

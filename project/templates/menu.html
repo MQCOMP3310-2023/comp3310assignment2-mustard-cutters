@@ -29,7 +29,7 @@
     {% endwith %}
 
 </div>
-{% if current_user.is_authenticated and current_user.role != 'public_user'%}
+{% if current_user.role == 'admin'  or current_user.id == restaurant.owner_id %}
 	<div class="row padding-top padding-bottom">
 		<div class="col-md-1"></div>
 		<div class="col-md-11 padding-none">
@@ -63,7 +63,7 @@
 								<h3>{{i.name}}</h3>
 								<p>{{i.description}}</p>
 								<p class="menu-price">{{i.price}}</p>
-								{% if current_user.is_authenticated and current_user.role != 'public_user'%}
+								{% if current_user.role == 'admin'  or current_user.id == restaurant.owner_id %}
 									<a href='{{url_for('main.editMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Edit</a> | 
 									<a href='{{url_for('main.deleteMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Delete</a>
 								{% endif %}
@@ -79,7 +79,7 @@
 							<h3>{{i.name}}</h3>
 							<p>{{i.description}}</p>
 							<p class="menu-price">{{i.price}}</p>
-							{% if current_user.is_authenticated and current_user.role != 'public_user'%}
+							{% if current_user.role == 'admin'  or current_user.id == restaurant.owner_id %}
 									<a href='{{url_for('main.editMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Edit</a> | 
 									<a href='{{url_for('main.deleteMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Delete</a>
 							{% endif %}
@@ -95,7 +95,7 @@
 							<h3>{{i.name}}</h3>
 							<p>{{i.description}}</p>
 							<p class="menu-price">{{i.price}}</p>
-							{% if current_user.is_authenticated and current_user.role != 'public_user'%}
+							{% if current_user.role == 'admin'  or current_user.id == restaurant.owner_id %}
 									<a href='{{url_for('main.editMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Edit</a> | 
 									<a href='{{url_for('main.deleteMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Delete</a>
 							{% endif %}
@@ -109,7 +109,7 @@
 							<h3>{{i.name}}</h3>
 							<p>{{i.description}}</p>
 							<p class="menu-price">{{i.price}}</p>
-							{% if current_user.is_authenticated and current_user.role != 'public_user'%}
+							{% if current_user.role == 'admin'  or current_user.id == restaurant.owner_id %}
 									<a href='{{url_for('main.editMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Edit</a> | 
 									<a href='{{url_for('main.deleteMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Delete</a>
 							{% endif %}
