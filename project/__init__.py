@@ -5,11 +5,14 @@ from flask_login import LoginManager
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
 
-def create_app():
+def create_app(test_config = None):
     app = Flask(__name__)
 
     app.config['SECRET_KEY'] = 'secret-key-do-not-reveal'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///restaurantmenu.db'
+
+    if test_config is not None:
+        app.config.from_mapping(test_config)
 
     db.init_app(app)
 
