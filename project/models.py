@@ -62,8 +62,8 @@ class MenuItem(db.Model):
        }
     
 class Rating(db.Model):
-    restaurant_id = db.Column(db.Integer, nullable=False, primary_key=True)
-    name = db.Column(db.String(250), nullable=False)
+    rating_id = db.Column(db.Integer, primary_key = True)
+    post_id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, nullable=False, primary_key=True)    
     rating = db.Column(db.Integer)
 
@@ -71,8 +71,8 @@ class Rating(db.Model):
     def serialize(self):
        """Return object data in easily serializeable format"""
        return {
-           'res_id'       : self.restaurant_id,
-           'name'         : self.name,
+           'rate_id'      : self.rating_id,
+           'post_id'      : self.post_id,
            'user_id'      : self.user_id,
            'rating'       : self.rating,
        }
