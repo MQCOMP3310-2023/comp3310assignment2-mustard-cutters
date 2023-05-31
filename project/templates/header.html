@@ -1,10 +1,19 @@
 
 <div class="row top-menu">
+{% if current_user.is_authenticated %}
 	<div class="col-md-6">
-		<a href="{{url_for('main.showRestaurants')}}">
+		<a href="{{url_for('main.showRestaurants', owner_id = current_user.id)}}">
 			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Restaurants
 		</a>
 	</div>
+{% endif %}
+{% if not current_user.is_authenticated %}
+	<div class="col-md-6">
+		<a href="{{url_for('main.publicShowRestaurants')}}">
+			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Restaurants
+		</a>
+	</div>
+{% endif %}
 	<div class="col-md-6 text-right">
 {% if current_user.is_authenticated %}
 		<a href="{{ url_for('main.profile') }}">
