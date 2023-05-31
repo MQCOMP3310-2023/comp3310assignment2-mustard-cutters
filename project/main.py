@@ -41,7 +41,7 @@ def newRestaurant(owner_id):
 
 #Edit a restaurant
 @main.route('/restaurant/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])
-@main.route('/restaurant/<int:restaurant_id>/edit/<int:owner_id>/', methods = ['GET', 'POST'])
+@main.route('/restaurant/<int:restaurant_id>/<int:owner_id>/edit/', methods = ['GET', 'POST'])
 def editRestaurant(restaurant_id, owner_id):
     editedRestaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
     if request.method == 'POST':
@@ -49,8 +49,8 @@ def editRestaurant(restaurant_id, owner_id):
         editedRestaurant.name = request.form['name']
         db.session.add(editedRestaurant)
         db.session.commit() 
-        flash('Restaurant Successfully Edited %s' % editedRestaurant.name)
-        return redirect(url_for('main.showRestaurants', owner_id = owner_id))
+        #flash('Restaurant Successfully Edited %s' % editedRestaurant.name)
+        return redirect(url_for('main.showRestaurants', restaurant = editedRestaurant, owner_id = owner_id))
     else:
         return render_template('editRestaurant.html', restaurant = editedRestaurant, owner_id = owner_id)
 
