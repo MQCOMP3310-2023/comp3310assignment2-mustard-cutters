@@ -1,7 +1,7 @@
 from project import db, create_app, models
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
-from project.models import Restaurant, MenuItem, User, Rating
+from project.models import Restaurant, MenuItem, User
 
 def populate_db():
 

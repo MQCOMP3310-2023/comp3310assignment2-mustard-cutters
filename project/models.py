@@ -60,19 +60,3 @@ class MenuItem(db.Model):
            'price'      : self.price,
            'course'     : self.course,
        }
-    
-class Rating(db.Model):
-    rating_id = db.Column(db.Integer, primary_key = True)
-    post_id = db.Column(db.Integer, primary_key = True)
-    user_id = db.Column(db.Integer, nullable=False, primary_key=True)    
-    rating = db.Column(db.Integer)
-
-    @property
-    def serialize(self):
-       """Return object data in easily serializeable format"""
-       return {
-           'rate_id'      : self.rating_id,
-           'post_id'      : self.post_id,
-           'user_id'      : self.user_id,
-           'rating'       : self.rating,
-       }
