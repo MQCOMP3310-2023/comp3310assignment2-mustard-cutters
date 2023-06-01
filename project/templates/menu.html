@@ -52,6 +52,21 @@
 		<div class="col-md-7"></div>
 	</div>
 {% endif %}
+
+{% if current_user.role == 'public_user' %}
+	<div class="row padding-top padding-bottom">
+		<div class="col-md-1"></div>
+		<div class="col-md-11 padding-none">
+			<a href="{{url_for('main.rateRestaurant', restaurant_id = restaurant.id)}}">
+				<button class="btn btn-default" id="new-rating">
+					<span class="glyphicon glyphicon-star" aria-hidden="true"></span>Add Rating
+				</button>
+			</a>
+		</div>
+		<div class="col-md-7"></div>
+	</div>
+{% endif %}
+
 	{% if items !=[] %}	
 		<div class="row">
 			<div class="col-md-1"></div>
@@ -120,4 +135,32 @@
 			<div class="col-md-1"></div>
 		</div>
 	{% endif %}
+
+<!-- Rating Display -->
+	<head>
+		<!-- Star Image Import -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	</head>
+
+	{% if ratings %}
+	<div class="row">
+	  <div class="col-md-1"></div>
+	  <div class="col-md-11">
+		<h2>User Ratings</h2>
+		<ul class="rating-list">
+		  {% for rating in ratings %}
+			<li class="rating-item">
+			  <span class="username">{{ rating.user_name }}</span>
+			  <span class="rating-stars">
+				{% for i in range(rating.rating) %}
+				  <i class="fas fa-star"></i>
+				{% endfor %}
+			  </span>
+			</li>
+		  {% endfor %}
+		</ul>
+	  </div>
+	</div>
+	{% endif %}
+
 {% endblock %}

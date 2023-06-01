@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import Restaurant, MenuItem, User
+from .models import Restaurant, MenuItem, User, Rating
 from sqlalchemy import asc
 from flask_login import login_required, current_user
 from . import db
@@ -7,14 +7,9 @@ from . import db
 main = Blueprint('main', __name__)
 
 #Show all restaurants
-@main.route('/restaurant/<int:owner_id>/')
-def showRestaurants(owner_id):
-  restaurants = db.session.query(Restaurant).order_by(asc(Restaurant.name))
-  return render_template('restaurants.html', restaurants = restaurants, owner_id = owner_id)
-
 @main.route('/')
 @main.route('/restaurant/')
-def publicShowRestaurants():
+def showRestaurants():
   restaurants = db.session.query(Restaurant).order_by(asc(Restaurant.name))
   return render_template('restaurants.html', restaurants = restaurants)
 
@@ -26,47 +21,42 @@ def profile():
 
 #Create a new restaurant
 @main.route('/restaurant/new/', methods=['GET','POST'])
-@main.route('/restaurant/<int:owner_id>/new/', methods=['GET','POST'])
-def newRestaurant(owner_id):
+def newRestaurant():
     if request.method == 'POST':
-      name = request.form['name']
-      newRestaurant = Restaurant(name = name, owner_id = owner_id), 
-      for item in newRestaurant:
-            db.session.add(item)
-            db.session.commit()
-      flash('New Restaurant %s Successfully Created' % name)
-      return redirect(url_for('main.showRestaurants', owner_id = owner_id))
+      newRestaurant = Restaurant(name = request.form['name'], ownerID = current_user.id), 
+      db.session.add(newRestaurant)
+      flash('New Restaurant %s Successfully Created' % newRestaurant.name)
+      db.session.commit()
+      return redirect(url_for('main.showRestaurants'))
     else:
-      return render_template('newRestaurant.html', owner_id = owner_id)
+      return render_template('newRestaurant.html')
 
 #Edit a restaurant
 @main.route('/restaurant/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])
-@main.route('/restaurant/<int:restaurant_id>/<int:owner_id>/edit/', methods = ['GET', 'POST'])
-def editRestaurant(restaurant_id, owner_id):
+def editRestaurant(restaurant_id):
     editedRestaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
     if request.method == 'POST':
       if request.form['name']:
         editedRestaurant.name = request.form['name']
         db.session.add(editedRestaurant)
         db.session.commit() 
-        #flash('Restaurant Successfully Edited %s' % editedRestaurant.name)
-        return redirect(url_for('main.showRestaurants', restaurant = editedRestaurant, owner_id = owner_id))
+        flash('Restaurant Successfully Edited %s' % editedRestaurant.name)
+        return redirect(url_for('main.showRestaurants'))
     else:
-        return render_template('editRestaurant.html', restaurant = editedRestaurant, owner_id = owner_id)
+        return render_template('editRestaurant.html', restaurant = editedRestaurant)
 
 
 #Delete a restaurant
 @main.route('/restaurant/<int:restaurant_id>/delete/', methods = ['GET','POST'])
-@main.route('/restaurant/<int:restaurant_id>/delete/<int:owner_id>/', methods = ['GET','POST'])
-def deleteRestaurant(restaurant_id, owner_id):
+def deleteRestaurant(restaurant_id):
     restaurantToDelete = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
     if request.method == 'POST':
         db.session.delete(restaurantToDelete)
         flash('%s Successfully Deleted' % restaurantToDelete.name)
         db.session.commit()
-        return redirect(url_for('main.showRestaurants', restaurant_id = restaurant_id, owner_id = owner_id))
+        return redirect(url_for('main.showRestaurants', restaurant_id = restaurant_id))
     else:
-        return render_template('deleteRestaurant.html',restaurant = restaurantToDelete, owner_id = owner_id)
+        return render_template('deleteRestaurant.html',restaurant = restaurantToDelete)
 
 #Show a restaurant menu
 @main.route('/restaurant/<int:restaurant_id>/')
@@ -74,8 +64,28 @@ def deleteRestaurant(restaurant_id, owner_id):
 def showMenu(restaurant_id):
     restaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
     items = db.session.query(MenuItem).filter_by(restaurant_id = restaurant_id).all()
-    return render_template('menu.html', items = items, restaurant = restaurant)
+    ratings = Rating.query.filter_by(restaurant_id=restaurant_id).all()
+    return render_template('menu.html', restaurant=restaurant, items=items, ratings=ratings)
      
+#Rate a restaurant
+@main.route('/restaurant/<int:restaurant_id>/rate/', methods=['GET', 'POST'])
+def rateRestaurant(restaurant_id):
+    ratedRestaurant = db.session.query(Restaurant).filter_by(id=restaurant_id).one()
+    if request.method == 'POST':
+        existing_rating = db.session.query(Rating).filter_by(restaurant_id=restaurant_id, user_name=current_user.name).first()
+        if existing_rating:
+            flash('You have already submitted a rating for this restaurant.', 'error')
+            return redirect(url_for('main.showRestaurants'))
+        if 'rating' not in request.form:
+            flash('Please select a valid rating.', 'error')
+            return redirect(url_for('main.showMenu', restaurant_id=restaurant_id))
+        rating_value = int(request.form['rating'])
+        new_rating = Rating(restaurant_id=restaurant_id, rating=rating_value, user_name=current_user.name)
+        db.session.add(new_rating)
+        db.session.commit()
+        flash('Restaurant successfully rated!', 'success')
+        return redirect(url_for('main.showRestaurants'))
+    return render_template('rateRestaurant.html', restaurant=ratedRestaurant)
 
 
 #Create a new menu item
