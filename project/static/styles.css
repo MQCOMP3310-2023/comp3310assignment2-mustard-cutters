@@ -180,7 +180,12 @@ h3 {
 }
 
 .rating-stars {
-	color: gold;
+	color: rgb(122, 122, 122);
 	font-size: 24px;
 	padding-left: 10px;
+}
+
+.rating-stars .fas.fa-star {
+	color: gold;
+	font-size: 24px;
 }
