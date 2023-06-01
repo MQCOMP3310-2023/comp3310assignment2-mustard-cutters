@@ -7,9 +7,14 @@ from . import db
 main = Blueprint('main', __name__)
 
 #Show all restaurants
+@main.route('/restaurant/<int:owner_id>/')
+def showRestaurants(owner_id):
+  restaurants = db.session.query(Restaurant).order_by(asc(Restaurant.name))
+  return render_template('restaurants.html', restaurants = restaurants, owner_id = owner_id)
+
 @main.route('/')
 @main.route('/restaurant/')
-def showRestaurants():
+def publicShowRestaurants():
   restaurants = db.session.query(Restaurant).order_by(asc(Restaurant.name))
   return render_template('restaurants.html', restaurants = restaurants)
 
@@ -21,19 +26,23 @@ def profile():
 
 #Create a new restaurant
 @main.route('/restaurant/new/', methods=['GET','POST'])
-def newRestaurant():
+@main.route('/restaurant/<int:owner_id>/new/', methods=['GET','POST'])
+def newRestaurant(owner_id):
     if request.method == 'POST':
-      newRestaurant = Restaurant(name = request.form['name'], ownerID = current_user.id), 
-      db.session.add(newRestaurant)
-      flash('New Restaurant %s Successfully Created' % newRestaurant.name)
-      db.session.commit()
-      return redirect(url_for('main.showRestaurants'))
+      name = request.form['name']
+      newRestaurant = Restaurant(name = name, owner_id = owner_id), 
+      for item in newRestaurant:
+            db.session.add(item)
+            db.session.commit()
+      flash('New Restaurant %s Successfully Created' % name)
+      return redirect(url_for('main.showRestaurants', owner_id = owner_id))
     else:
-      return render_template('newRestaurant.html')
+      return render_template('newRestaurant.html', owner_id = owner_id)
 
 #Edit a restaurant
 @main.route('/restaurant/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])
-def editRestaurant(restaurant_id):
+@main.route('/restaurant/<int:restaurant_id>/edit/<int:owner_id>/', methods = ['GET', 'POST'])
+def editRestaurant(restaurant_id, owner_id):
     editedRestaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
     if request.method == 'POST':
       if request.form['name']:
@@ -41,22 +50,23 @@ def editRestaurant(restaurant_id):
         db.session.add(editedRestaurant)
         db.session.commit() 
         flash('Restaurant Successfully Edited %s' % editedRestaurant.name)
-        return redirect(url_for('main.showRestaurants'))
+        return redirect(url_for('main.showRestaurants', owner_id = owner_id))
     else:
-        return render_template('editRestaurant.html', restaurant = editedRestaurant)
+        return render_template('editRestaurant.html', restaurant = editedRestaurant, owner_id = owner_id)
 
 
 #Delete a restaurant
 @main.route('/restaurant/<int:restaurant_id>/delete/', methods = ['GET','POST'])
-def deleteRestaurant(restaurant_id):
+@main.route('/restaurant/<int:restaurant_id>/delete/<int:owner_id>/', methods = ['GET','POST'])
+def deleteRestaurant(restaurant_id, owner_id):
     restaurantToDelete = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
     if request.method == 'POST':
         db.session.delete(restaurantToDelete)
         flash('%s Successfully Deleted' % restaurantToDelete.name)
         db.session.commit()
-        return redirect(url_for('main.showRestaurants', restaurant_id = restaurant_id))
+        return redirect(url_for('main.showRestaurants', restaurant_id = restaurant_id, owner_id = owner_id))
     else:
-        return render_template('deleteRestaurant.html',restaurant = restaurantToDelete)
+        return render_template('deleteRestaurant.html',restaurant = restaurantToDelete, owner_id = owner_id)
 
 #Show a restaurant menu
 @main.route('/restaurant/<int:restaurant_id>/')
