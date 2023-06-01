@@ -79,8 +79,8 @@
 								<p>{{i.description}}</p>
 								<p class="menu-price">{{i.price}}</p>
 								{% if current_user.role == 'admin'  or current_user.id == restaurant.owner_id %}
-									<a href='{{url_for('main.editMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Edit</a> | 
-									<a href='{{url_for('main.deleteMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Delete</a>
+									<a href='{{url_for('main.editMenuItem', restaurant_id = restaurant.id, menu_id=i.id, owner_id = current_user.id ) }}'>Edit</a> | 
+									<a href='{{url_for('main.deleteMenuItem', restaurant_id = restaurant.id, menu_id=i.id, owner_id = current_user.id ) }}'>Delete</a>
 								{% endif %}
 							</div>
 						{% endif %}
@@ -95,8 +95,8 @@
 							<p>{{i.description}}</p>
 							<p class="menu-price">{{i.price}}</p>
 							{% if current_user.role == 'admin'  or current_user.id == restaurant.owner_id %}
-									<a href='{{url_for('main.editMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Edit</a> | 
-									<a href='{{url_for('main.deleteMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Delete</a>
+									<a href='{{url_for('main.editMenuItem', restaurant_id = restaurant.id, menu_id=i.id, owner_id = current_user.id ) }}'>Edit</a> | 
+									<a href='{{url_for('main.deleteMenuItem', restaurant_id = restaurant.id, menu_id=i.id, owner_id = current_user.id ) }}'>Delete</a>
 							{% endif %}
 						</div>
 						{% endif %}
@@ -111,8 +111,8 @@
 							<p>{{i.description}}</p>
 							<p class="menu-price">{{i.price}}</p>
 							{% if current_user.role == 'admin'  or current_user.id == restaurant.owner_id %}
-									<a href='{{url_for('main.editMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Edit</a> | 
-									<a href='{{url_for('main.deleteMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Delete</a>
+									<a href='{{url_for('main.editMenuItem', restaurant_id = restaurant.id, menu_id=i.id, owner_id = current_user.id ) }}'>Edit</a> | 
+									<a href='{{url_for('main.deleteMenuItem', restaurant_id = restaurant.id, menu_id=i.id, owner_id = current_user.id ) }}'>Delete</a>
 							{% endif %}
 						</div>
 						{% endif %}
@@ -125,8 +125,8 @@
 							<p>{{i.description}}</p>
 							<p class="menu-price">{{i.price}}</p>
 							{% if current_user.role == 'admin'  or current_user.id == restaurant.owner_id %}
-									<a href='{{url_for('main.editMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Edit</a> | 
-									<a href='{{url_for('main.deleteMenuItem', restaurant_id = restaurant.id, menu_id=i.id ) }}'>Delete</a>
+									<a href='{{url_for('main.editMenuItem', restaurant_id = restaurant.id, menu_id=i.id, owner_id = current_user.id ) }}'>Edit</a> | 
+									<a href='{{url_for('main.deleteMenuItem', restaurant_id = restaurant.id, menu_id=i.id, owner_id = current_user.id ) }}'>Delete</a>
 							{% endif %}
 						</div>
 						{% endif %}

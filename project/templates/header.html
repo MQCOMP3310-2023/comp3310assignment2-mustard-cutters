@@ -1,13 +1,13 @@
 
 <div class="row top-menu">
-{% if current_user.is_authenticated %}
+{% if current_user.role == 'restaurant_owner' or  current_user.role == 'admin' %}
 	<div class="col-md-6">
 		<a href="{{url_for('main.showRestaurants', owner_id = current_user.id)}}">
 			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Restaurants
 		</a>
 	</div>
 {% endif %}
-{% if not current_user.is_authenticated %}
+{% if not current_user.is_authenticated or current_user.role == 'public_user'%}
 	<div class="col-md-6">
 		<a href="{{url_for('main.publicShowRestaurants')}}">
 			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Restaurants
