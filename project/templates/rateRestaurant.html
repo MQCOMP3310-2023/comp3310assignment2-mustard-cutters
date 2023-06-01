@@ -13,16 +13,16 @@
         <div class="col-md-6 col-md-offset-1 padding-top">
             <form action="{{ url_for('main.rateRestaurant', restaurant_id=restaurant.id) }}" method="post">
                 <div class="rating">
-                    <input type="radio" id="star5" name="rating" value="5">
-                    <label for="star1" title="5 stars" class="star-button">&#9733;<span>1</span></label>
-                    <input type="radio" id="star4" name="rating" value="4">
-                    <label for="star2" title="4 stars" class="star-button">&#9733;<span>2</span></label>
-                    <input type="radio" id="star3" name="rating" value="3">
-                    <label for="star3" title="3 stars" class="star-button">&#9733;<span>3</span></label>
-                    <input type="radio" id="star2" name="rating" value="2">
-                    <label for="star4" title="2 stars" class="star-button">&#9733;<span>4</span></label>
                     <input type="radio" id="star1" name="rating" value="1">
-                    <label for="star5" title="1 star" class="star-button">&#9733;<span>5</span></label>
+                    <label for="star1" class="star-button">&#9733;<span>1</span></label>
+                    <input type="radio" id="star3" name="rating" value="2">
+                    <label for="star2" class="star-button">&#9733;<span>2</span></label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3" class="star-button">&#9733;<span>3</span></label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4" class="star-button">&#9733;<span>4</span></label>
+                    <input type="radio" id="star5" name="rating" value="5">
+                    <label for="star5" class="star-button">&#9733;<span>5</span></label>
                 </div>
 
                 <a href="{{ url_for('main.showRestaurants') }}">

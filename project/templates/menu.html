@@ -136,18 +136,31 @@
 		</div>
 	{% endif %}
 
+<!-- Rating Display -->
+	<head>
+		<!-- Star Image Import -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	</head>
+
 	{% if ratings %}
 	<div class="row">
-		<div class="col-md-1"></div>
-		<div class="col-md-11">
-			<h2>User Ratings</h2>
-			<ul>
-				{% for rating in ratings %}
-					<li>{{ rating.user_name }} - {{ rating.rating }}</li>
+	  <div class="col-md-1"></div>
+	  <div class="col-md-11">
+		<h2>User Ratings</h2>
+		<ul class="rating-list">
+		  {% for rating in ratings %}
+			<li class="rating-item">
+			  <span class="username">{{ rating.user_name }}</span>
+			  <span class="rating-stars">
+				{% for i in range(rating.rating) %}
+				  <i class="fas fa-star"></i>
 				{% endfor %}
-			</ul>
-		</div>
+			  </span>
+			</li>
+		  {% endfor %}
+		</ul>
+	  </div>
 	</div>
 	{% endif %}
-	
+
 {% endblock %}
