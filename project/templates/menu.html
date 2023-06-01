@@ -150,10 +150,10 @@
 		<ul class="rating-list">
 		  {% for rating in ratings %}
 			<li class="rating-item">
-			  <span class="username">{{ rating.user_name }}</span>
+			  <span class="username">{{ rating.user_name }}</span> - 
 			  <span class="rating-stars">
 				{% for i in range(rating.rating) %}
-				  <i class="fas fa-star"></i>
+				  <i class="fas fa-star fa-fw"></i>
 				{% endfor %}
 			  </span>
 			</li>
