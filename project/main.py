@@ -77,9 +77,9 @@ def rateRestaurant(restaurant_id):
             flash('You have already submitted a rating for this restaurant.', 'error')
             return redirect(url_for('main.showRestaurants'))
         rating_value = int(request.form['rating'])
-        if rating_value not in range(1, 5):
+        if rating_value not in range(1, 6):
             flash('Please select a valid rating from 1 to 5', 'error')
-            return redirect(url_for('main.rateRestaurant', restaurant_id=restaurant_id))
+            return redirect(url_for('main.showMenu', restaurant_id = restaurant_id))
         new_rating = Rating(restaurant_id=restaurant_id, rating=rating_value, user_name=current_user.name)
         try:
             db.session.add(new_rating)
