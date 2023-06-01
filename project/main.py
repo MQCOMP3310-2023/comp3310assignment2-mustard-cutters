@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import Restaurant, MenuItem, User
+from .models import Restaurant, MenuItem, User, Rating
 from sqlalchemy import asc
 from flask_login import login_required, current_user
 from . import db
@@ -64,21 +64,32 @@ def deleteRestaurant(restaurant_id):
 def showMenu(restaurant_id):
     restaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
     items = db.session.query(MenuItem).filter_by(restaurant_id = restaurant_id).all()
-    return render_template('menu.html', items = items, restaurant = restaurant)
+    ratings = Rating.query.filter_by(restaurant_id=restaurant_id).all()
+    return render_template('menu.html', restaurant=restaurant, items=items, ratings=ratings)
      
 #Rate a restaurant
-@main.route('/restaurant/<int:restaurant_id>/rate/', methods = ['GET', 'POST'])
+@main.route('/restaurant/<int:restaurant_id>/rate/', methods=['GET', 'POST'])
 def rateRestaurant(restaurant_id):
-    ratedRestaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
+    ratedRestaurant = db.session.query(Restaurant).filter_by(id=restaurant_id).one()
     if request.method == 'POST':
-      if request.form['name']:
-        ratedRestaurant.name = request.form['name']
-        db.session.add(ratedRestaurant)
-        db.session.commit() 
-        flash('Restaurant Successfully Rated %s' % ratedRestaurant.name)
-        return redirect(url_for('main.showRestaurants'))
-    else:
-        return render_template('rateRestaurant.html', restaurant = ratedRestaurant)
+        existing_rating = db.session.query(Rating).filter_by(restaurant_id=restaurant_id, user_name=current_user.name).first()
+        if existing_rating:
+            flash('You have already submitted a rating for this restaurant.', 'error')
+            return redirect(url_for('main.showRestaurants'))
+        rating_value = int(request.form['rating'])
+        if rating_value not in range(1, 5):
+            flash('Please select a valid rating from 1 to 5', 'error')
+            return redirect(url_for('main.rateRestaurant', restaurant_id=restaurant_id))
+        new_rating = Rating(restaurant_id=restaurant_id, rating=rating_value, user_name=current_user.name)
+        try:
+            db.session.add(new_rating)
+            db.session.commit()
+            flash('Restaurant successfully rated!', 'success')
+            return redirect(url_for('main.showRestaurants'))
+        except Exception as e:
+            flash('An error occurred while saving the rating. Please try again later.', 'error')
+            return redirect(url_for('main.rateRestaurant', restaurant_id=restaurant_id))
+    return render_template('rateRestaurant.html', restaurant=ratedRestaurant)
 
 
 #Create a new menu item

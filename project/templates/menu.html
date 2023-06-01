@@ -135,4 +135,19 @@
 			<div class="col-md-1"></div>
 		</div>
 	{% endif %}
+
+	{% if ratings %}
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-11">
+			<h2>User Ratings</h2>
+			<ul>
+				{% for rating in ratings %}
+					<li>{{ rating.user_name }} - {{ rating.rating }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	{% endif %}
+	
 {% endblock %}
