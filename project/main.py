@@ -76,19 +76,15 @@ def rateRestaurant(restaurant_id):
         if existing_rating:
             flash('You have already submitted a rating for this restaurant.', 'error')
             return redirect(url_for('main.showRestaurants'))
+        if 'rating' not in request.form:
+            flash('Please select a valid rating.', 'error')
+            return redirect(url_for('main.showMenu', restaurant_id=restaurant_id))
         rating_value = int(request.form['rating'])
-        if rating_value not in range(1, 6):
-            flash('Please select a valid rating from 1 to 5', 'error')
-            return redirect(url_for('main.showMenu', restaurant_id = restaurant_id))
         new_rating = Rating(restaurant_id=restaurant_id, rating=rating_value, user_name=current_user.name)
-        try:
-            db.session.add(new_rating)
-            db.session.commit()
-            flash('Restaurant successfully rated!', 'success')
-            return redirect(url_for('main.showRestaurants'))
-        except Exception as e:
-            flash('An error occurred while saving the rating. Please try again later.', 'error')
-            return redirect(url_for('main.rateRestaurant', restaurant_id=restaurant_id))
+        db.session.add(new_rating)
+        db.session.commit()
+        flash('Restaurant successfully rated!', 'success')
+        return redirect(url_for('main.showRestaurants'))
     return render_template('rateRestaurant.html', restaurant=ratedRestaurant)
 
 
