@@ -53,11 +53,11 @@
 	</div>
 {% endif %}
 
-{% if current_user.role == 'user' %}
+{% if current_user.role == 'public_user' %}
 	<div class="row padding-top padding-bottom">
 		<div class="col-md-1"></div>
 		<div class="col-md-11 padding-none">
-			<a href="{{url_for('main.rateRestaurant', restaurant_id = restaurant.id )}}">
+			<a href="{{url_for('main.rateRestaurant', restaurant_id = restaurant.id)}}">
 				<button class="btn btn-default" id="new-rating">
 					<span class="glyphicon glyphicon-star" aria-hidden="true"></span>Add Rating
 				</button>

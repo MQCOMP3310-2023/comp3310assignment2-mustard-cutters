@@ -66,6 +66,19 @@ def showMenu(restaurant_id):
     items = db.session.query(MenuItem).filter_by(restaurant_id = restaurant_id).all()
     return render_template('menu.html', items = items, restaurant = restaurant)
      
+#Rate a restaurant
+@main.route('/restaurant/<int:restaurant_id>/rate/', methods = ['GET', 'POST'])
+def rateRestaurant(restaurant_id):
+    ratedRestaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
+    if request.method == 'POST':
+      if request.form['name']:
+        ratedRestaurant.name = request.form['name']
+        db.session.add(ratedRestaurant)
+        db.session.commit() 
+        flash('Restaurant Successfully Rated %s' % ratedRestaurant.name)
+        return redirect(url_for('main.showRestaurants'))
+    else:
+        return render_template('rateRestaurant.html', restaurant = ratedRestaurant)
 
 
 #Create a new menu item
