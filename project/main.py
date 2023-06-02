@@ -72,10 +72,11 @@ def deleteRestaurant(restaurant_id, owner_id):
 @main.route('/restaurant/<int:restaurant_id>/')
 @main.route('/restaurant/<int:restaurant_id>/menu/')
 def showMenu(restaurant_id):
+    existing_rating = db.session.query(Rating).filter_by(restaurant_id=restaurant_id, user_id=current_user.id).first()
     restaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
     items = db.session.query(MenuItem).filter_by(restaurant_id = restaurant_id).all()
     ratings = Rating.query.filter_by(restaurant_id=restaurant_id).all()
-    return render_template('menu.html', restaurant=restaurant, items=items, ratings=ratings)
+    return render_template('menu.html', restaurant=restaurant, items=items, ratings=ratings, existing= existing_rating)
 
 #Create a new menu item
 @main.route('/restaurant/<int:restaurant_id>/menu/new/',methods=['GET','POST'])
@@ -129,13 +130,14 @@ def deleteMenuItem(restaurant_id, menu_id, owner_id):
     
 #Rate a restaurant
 @main.route('/restaurant/<int:restaurant_id>/rate/', methods=['GET', 'POST'])
-def rateRestaurant(restaurant_id):
+@main.route('/restaurant/<int:restaurant_id>/<int:user_id>/rate/', methods=['GET', 'POST'])
+def rateRestaurant(restaurant_id, user_id):
     ratedRestaurant = db.session.query(Restaurant).filter_by(id=restaurant_id).one()
     if request.method == 'POST':
-        existing_rating = db.session.query(Rating).filter_by(restaurant_id=restaurant_id, user_name=current_user.name).first()
+        existing_rating = db.session.query(Rating).filter_by(restaurant_id=restaurant_id, user_id=user_id).first()
         if 'rating' not in request.form:
             flash('Please select a valid rating.', 'error')
-            return redirect(url_for('main.rateRestaurant', restaurant_id=restaurant_id))
+            return redirect(url_for('main.rateRestaurant', restaurant_id=restaurant_id, user_id = user_id))
         if existing_rating:
             if request.form['rating']:
                 existing_rating.rating = request.form['rating']
@@ -145,7 +147,7 @@ def rateRestaurant(restaurant_id):
             return redirect(url_for('main.showMenu', restaurant_id=restaurant_id))
         else:
             rating_value = int(request.form['rating'])
-            new_rating = Rating(restaurant_id=restaurant_id, rating=rating_value, user_name=current_user.name)
+            new_rating = Rating(restaurant_id=restaurant_id, rating=rating_value, user_name = current_user.name, user_id=user_id)
             db.session.add(new_rating)
             db.session.commit()
             flash('Restaurant successfully rated!', 'success')

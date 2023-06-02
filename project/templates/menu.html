@@ -68,31 +68,25 @@
 {% endif %}
 
 {% if current_user.role == 'public_user' %}
-	{% if not existing_rating %}
-		<div class="row padding-top padding-bottom">
-			<div class="col-md-1"></div>
-			<div class="col-md-11 padding-none">
-				<a href="{{url_for('main.rateRestaurant', restaurant_id = restaurant.id)}}">
-					<button class="btn btn-default" id="new-rating">
-						<span class="glyphicon glyphicon-star" aria-hidden="true"></span>Add Rating
-					</button>
-				</a>
-			</div>
-			<div class="col-md-7"></div>
+	<div class="row padding-top padding-bottom">
+		<div class="col-md-1"></div>
+		<div class="col-md-11 padding-none">
+			<a href="{{url_for('main.rateRestaurant', restaurant_id = restaurant.id, user_id = current_user.id)}}">
+				<button class="btn btn-default" id="new-rating">
+					{% if ratings %}
+						{% if existing %}
+							<span class="glyphicon glyphicon-star" aria-hidden="true"></span>Edit Rating
+						{% else %}
+							<span class="glyphicon glyphicon-star" aria-hidden="true"></span>Add Rating
+						{% endif %}
+					{% else %}
+						<span class="glyphicon glyphicon-star" aria-hidden="true"></span>new Rating
+					{% endif %}
+				</button>
+			</a>
 		</div>
-	{% else %}
-		<div class="row padding-top padding-bottom">
-			<div class="col-md-1"></div>
-			<div class="col-md-11 padding-none">
-				<a href="{{url_for('main.rateRestaurant', restaurant_id = restaurant.id)}}">
-					<button class="btn btn-default" id="new-rating">
-						<span class="glyphicon glyphicon-star" aria-hidden="true"></span>Edit Rating
-					</button>
-				</a>
-			</div>
-			<div class="col-md-7"></div>
-		</div>
-	{% endif %}
+		<div class="col-md-7"></div>
+	</div>
 {% endif %}
 
 	{% if items !=[] %}	
