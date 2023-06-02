@@ -76,7 +76,8 @@ def showMenu(restaurant_id):
     restaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
     items = db.session.query(MenuItem).filter_by(restaurant_id = restaurant_id).all()
     ratings = Rating.query.filter_by(restaurant_id=restaurant_id).all()
-    return render_template('menu.html', restaurant=restaurant, items=items, ratings=ratings, existing= existing_rating)
+    owner_name = db.session.query(User).filter_by(id=restaurant.owner_id).first()
+    return render_template('menu.html', restaurant=restaurant, items=items, ratings=ratings, existing= existing_rating, owner = owner_name.name)
 
 #Create a new menu item
 @main.route('/restaurant/<int:restaurant_id>/menu/new/',methods=['GET','POST'])
