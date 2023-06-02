@@ -133,17 +133,22 @@ def rateRestaurant(restaurant_id):
     ratedRestaurant = db.session.query(Restaurant).filter_by(id=restaurant_id).one()
     if request.method == 'POST':
         existing_rating = db.session.query(Rating).filter_by(restaurant_id=restaurant_id, user_name=current_user.name).first()
-        if existing_rating:
-            flash('You have already submitted a rating for this restaurant.', 'error')
-            return redirect(url_for('main.showMenu', restaurant_id=restaurant_id))
         if 'rating' not in request.form:
             flash('Please select a valid rating.', 'error')
             return redirect(url_for('main.rateRestaurant', restaurant_id=restaurant_id))
-        rating_value = int(request.form['rating'])
-        new_rating = Rating(restaurant_id=restaurant_id, rating=rating_value, user_name=current_user.name)
-        db.session.add(new_rating)
-        db.session.commit()
-        flash('Restaurant successfully rated!', 'success')
-        return redirect(url_for('main.showMenu', restaurant_id = restaurant_id))
+        if existing_rating:
+            if request.form['rating']:
+                existing_rating.rating = request.form['rating']
+            db.session.add(existing_rating)
+            db.session.commit()
+            flash('Rating successfully updated.', 'success')
+            return redirect(url_for('main.showMenu', restaurant_id=restaurant_id))
+        else:
+            rating_value = int(request.form['rating'])
+            new_rating = Rating(restaurant_id=restaurant_id, rating=rating_value, user_name=current_user.name)
+            db.session.add(new_rating)
+            db.session.commit()
+            flash('Restaurant successfully rated!', 'success')
+            return redirect(url_for('main.showMenu', restaurant_id = restaurant_id))
     else:
         return render_template('rateRestaurant.html', restaurant=ratedRestaurant)
