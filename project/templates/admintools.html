@@ -1,0 +1,26 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+<h1 class="title">
+  Admin Tools
+</h1>
+
+<h2>
+  Manage Users
+</h2>
+
+{% for user in user %}
+		<a href = "{{url_for('auth.editUser', user_id = user.id)}}">
+			<div class="row">
+				<div class="col-md-1"></div>
+					<div class="col-md-10 restaurant-list">
+						<h3>{{user.name}}</h3>
+            <h3>{{user.email}}</h3>
+            <h3>{{user.role}}</h3>
+					</div>
+				<div class="col-md-1"></div>
+			</div>
+		</a>
+	{% endfor %}
+{% endblock %}   

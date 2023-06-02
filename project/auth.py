@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
 from flask_login import login_user, login_required, logout_user
-from sqlalchemy import text
+from sqlalchemy import text, asc
 from .models import User
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -11,25 +11,31 @@ auth = Blueprint('auth', __name__)
 def login():
     return render_template('login.html')
 
-"""
-@auth.route('/adminfunctions/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])
-def adminfunctions(user):
-    editUser = User.query.filter_by(email=email).first()
-    return render_template('adminfunctions.html')
+#admin tools
+@auth.route('/admintools')
+@login_required
+def adminTools():
+    user = db.session.query(User).order_by(asc(User.name))
+    return render_template('admintools.html', user = user)
 
-@main.route('/restaurant/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])
-def editRestaurant(restaurant_id):
-    editedRestaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
+#Edit user details
+@auth.route('/admintools/<int:user_id>/edit/', methods = ['GET', 'POST'])
+def editUser(user_id):
+    editedUser = db.session.query(User).filter_by(id = user_id).first()
     if request.method == 'POST':
-      if request.form['name']:
-        editedRestaurant.name = request.form['name']
-        db.session.add(editedRestaurant)
+        if request.form['email']:
+            editedUser.email = request.form['email']
+        if request.form['name']:
+            editedUser.name = request.form['name']
+        if request.form['password']:
+            editedUser.password = request.form['password']
+        db.session.add(editedUser)
         db.session.commit() 
-        flash('Restaurant Successfully Edited %s' % editedRestaurant.name)
-        return redirect(url_for('main.showRestaurants'))
+        flash('User Details Successfully Edited')
+        return redirect(url_for('auth.adminTools'))
     else:
-        return render_template('editRestaurant.html', restaurant = editedRestaurant)
-"""
+        return render_template('edituser.html')
+
 @auth.route('/login', methods=['POST'])
 def login_post():
     email = request.form.get('email')
@@ -45,12 +51,9 @@ def login_post():
         current_app.logger.warning("User login failed")
         return redirect(url_for('auth.login')) # if the user doesn't exist or password is wrong, reload the page
 
-    # get the user role
-    role = user.role
-
     # if the above check passes, then we know the user has the right credentials
     login_user(user, remember=remember)
-    return redirect(url_for('main.showRestaurants', owner_id = user.id))
+    return redirect(url_for('main.showRestaurants'))
                     
                     
 
