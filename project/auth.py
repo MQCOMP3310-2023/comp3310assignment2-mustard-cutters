@@ -28,13 +28,16 @@ def editUser(user_id):
         if request.form['name']:
             editedUser.name = request.form['name']
         if request.form['password']:
-            editedUser.password = request.form['password']
+            new_password = request.form['password']
+            editedUser.password = generate_password_hash(new_password, method='sha256')
+        if request.form['role']:
+            editedUser.role = request.form['role']
         db.session.add(editedUser)
         db.session.commit() 
-        flash('User Details Successfully Edited')
-        return redirect(url_for('auth.adminTools'))
+        flash('User Details Successfully Updated')
+        return redirect(url_for('auth.adminTools', User=User, user_id = user_id))
     else:
-        return render_template('edituser.html')
+        return render_template('edituser.html', User=User, user = editedUser)
 
 @auth.route('/login', methods=['POST'])
 def login_post():
@@ -53,7 +56,7 @@ def login_post():
 
     # if the above check passes, then we know the user has the right credentials
     login_user(user, remember=remember)
-    return redirect(url_for('main.showRestaurants'))
+    return redirect(url_for('main.showRestaurants', owner_id = user.id))
                     
                     
 
@@ -66,7 +69,6 @@ def signup_post():
     email = request.form.get('email')
     name = request.form.get('name')
     password = request.form.get('password')
-    role = request.form.get('role')
 
     user = User.query.filter_by(email=email).first()
     if user: 
@@ -74,7 +76,7 @@ def signup_post():
         current_app.logger.debug("User email already exists")
         return redirect(url_for('auth.signup'))
 
-    new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'), role=role)
+    new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'), role='public_user')
 
     # add the new user to the database
     db.session.add(new_user)

@@ -6,6 +6,20 @@
   Admin Tools
 </h1>
 
+<div class = 'flash'>
+  {% with messages = get_flashed_messages() %}
+     {% if messages %}
+         
+       <ul>
+       {% for message in messages %}
+           <li> <strong> {{ message }} </strong> </li>
+       {% endfor %}
+       </ul>
+       {% endif %}
+   {% endwith %}
+
+</div>
+
 <h2>
   Manage Users
 </h2>
@@ -17,7 +31,13 @@
 					<div class="col-md-10 restaurant-list">
 						<h3>{{user.name}}</h3>
             <h3>{{user.email}}</h3>
-            <h3>{{user.role}}</h3>
+            {% if user.role == 'admin' %}
+              <h3>Admin</h3>
+            {% elif user.role == 'restaurant_owner' %}
+              <h3>Restaurant Owner</h3>
+            {% else %}
+              <h3>Public User</h3>
+            {% endif %}
 					</div>
 				<div class="col-md-1"></div>
 			</div>

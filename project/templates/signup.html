@@ -31,15 +31,7 @@
                     <input class="input is-large" type="password" name="password" placeholder="Password">
                 </div>
             </div>
-            <div class="form-group">
-                <label for="role">Role:</label>
-                <select name="role" class="form-control" id="role">
-                    {% for value, label in User.ROLES %}
-                        <option value="{{ value }}">{{ label }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
+            
             <button class="button is-block is-info is-large is-fullwidth">Sign Up</button>
         </form>
     </div>
