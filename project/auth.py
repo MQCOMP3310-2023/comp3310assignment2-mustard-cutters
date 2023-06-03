@@ -39,6 +39,18 @@ def editUser(user_id):
     else:
         return render_template('edituser.html', User=User, user = editedUser)
 
+#delete user
+@auth.route('/admintools/<int:user_id>/delete/', methods = ['GET', 'POST'])
+def deleteUser(user_id):
+    userToDelete = db.session.query(User).filter_by(id = user_id).first()
+    if request.method == 'POST':
+        db.session.delete(userToDelete)
+        db.session.commit()
+        flash('User Successfully Deleted')
+        return redirect(url_for('auth.adminTools', User=User, user_id = user_id))
+    else:
+        return render_template('deleteuser.html', User=User, user = userToDelete)
+
 @auth.route('/login', methods=['POST'])
 def login_post():
     email = request.form.get('email')

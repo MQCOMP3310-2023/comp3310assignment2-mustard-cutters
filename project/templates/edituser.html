@@ -17,16 +17,7 @@
           <input type ="text" maxlength="100" class="form-control" name="name" value="{{user.name }}">
 
           <label for="password">Password:</label>
-          <input type ="text" maxlength="100" class="form-control" name="password" value="">
-
-          <!--<div class="form-group">
-            <label for="role">Role:</label>
-            <select name="role" class="form-control" id="role">
-                {% for value, label in User.ROLE %}
-                    <option value="{{ value }}">{{ label }}</option>
-                {% endfor %} 
-            </select>
-          </div>-->
+          <input type ="text" maxlength="100" class="form-control" name="password" placeholder="New Password">
 
         </div>
         <label for="course">Role:</label>
@@ -55,6 +46,12 @@
         <button class="btn btn-default delete">
         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel</button>
       </a>
+
+      <a href="{{url_for('auth.deleteUser', user_id = user.id)}}">
+				<button class="btn btn-default delete" id="delete-restaurant">
+					<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>Delete User
+				</button>
+        </a>
     </div>
   </div>
 

@@ -84,7 +84,18 @@ def showMenu(restaurant_id):
 @main.route('/restaurant/<int:restaurant_id>/<int:owner_id>/menu/new/',methods=['GET','POST'])
 def newMenuItem(restaurant_id, owner_id):
     restaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
+    global error 
     if request.method == 'POST':
+        error = False
+        check_price = request.form['price']
+        if (not check_price.isnumeric()) and (not isfloat(check_price)):
+            flash('Please add price. Price must be a number.', 'error')
+            error = True
+        if 'course' not in request.form:
+            flash('Please select a course.', 'error')
+            error = True
+        if error:
+            return redirect(url_for('main.newMenuItem', restaurant_id=restaurant_id, owner_id = owner_id))
         newItem = MenuItem(name = request.form['name'], description = request.form['description'], price = request.form['price'], course = request.form['course'], restaurant_id = restaurant_id)
         db.session.add(newItem)
         db.session.commit()
@@ -100,6 +111,10 @@ def editMenuItem(restaurant_id, menu_id, owner_id):
     editedItem = db.session.query(MenuItem).filter_by(id = menu_id).one()
     restaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
     if request.method == 'POST':
+        check_price = request.form['price']
+        if (not check_price.isnumeric()) and (not isfloat(check_price)):
+            flash('Please add price. Price must be a number.', 'error')
+            return redirect(url_for('main.editMenuItem', restaurant_id=restaurant_id, menu_id = menu_id, owner_id = owner_id))
         if request.form['name']:
             editedItem.name = request.form['name']
         if request.form['description']:
@@ -155,3 +170,11 @@ def rateRestaurant(restaurant_id, user_id):
             return redirect(url_for('main.showMenu', restaurant_id = restaurant_id))
     else:
         return render_template('rateRestaurant.html', restaurant=ratedRestaurant)
+
+#check float function
+def isfloat(num):
+    try:
+        float(num)
+        return True
+    except ValueError:
+        return False
