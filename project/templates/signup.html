@@ -6,12 +6,20 @@
     <h3 class="title">Sign Up</h3>
     <div class="box">
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-    <div class="notification is-danger">
-        {{ messages[0] }}. Go to <a href="{{ url_for('auth.login')}}">login page</a>.
-    </div>
-{% endif %}
+{% with email_message = get_flashed_messages(category_filter=["email"]) %}
+    {% if email_message %}
+        <div class="notification is-danger">
+            {{ email_message[0] }}. Go to <a href="{{ url_for('auth.login')}}">login page</a>.
+        </div>
+    {% endif %}
+{% endwith %}
+
+{% with error_message = get_flashed_messages(category_filter=["error"]) %}
+    {% if error_message %}
+        <div class="notification is-danger">
+            {{ error_message[0] }}
+        </div>
+    {% endif %}
 {% endwith %}
         <form method="POST" action="/signup">
             <div class="field">
