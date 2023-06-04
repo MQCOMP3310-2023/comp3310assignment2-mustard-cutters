@@ -58,6 +58,7 @@
 					<span class="glyphicon glyphicon-glass" aria-hidden="true"></span>Add Menu Item
 				</button>
 			</a>
+
 			<a href="{{url_for('main.deleteRestaurant', restaurant_id = restaurant.id, owner_id = current_user.id )}}">
 				<button class="btn btn-default delete" id="delete-restaurant">
 					<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>Delete Restaurant
