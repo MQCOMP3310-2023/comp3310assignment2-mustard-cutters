@@ -13,11 +13,13 @@
         <h2>Account Details</h2>
         <div class="row">
           <div class="col-md-6">
+            
             <div class="account-name">
               <h3>Name</h3>
               <p>{{ user.name }}</p>
             </div>
           </div>
+
           <div class="col-md-6">
             <div class="account-email">
               <h3>Email</h3>
@@ -30,19 +32,13 @@
       <div class="user-form">
         <label for="role">Role:</label>
         <div class="radio">
-          <label>
-            <input type="radio" name="role" id="admin" value="admin" {% if user.role == 'admin' %}checked{% endif %}> Admin
-          </label>
+          <label> <input type="radio" name="role" id="admin" value="admin" {% if user.role == 'admin' %}checked{% endif %}> Admin </label>
         </div>
         <div class="radio">
-          <label>
-            <input type="radio" name="role" id="restaurant_owner" value="restaurant_owner" {% if user.role == 'restaurant_owner' %}checked{% endif %}> Restaurant Owner
-          </label>
+          <label> <input type="radio" name="role" id="restaurant_owner" value="restaurant_owner" {% if user.role == 'restaurant_owner' %}checked{% endif %}> Restaurant Owner </label>
         </div>
         <div class="radio">
-          <label>
-            <input type="radio" name="role" id="public_user" value="public_user" {% if user.role == 'public_user' %}checked{% endif %}> Public User
-          </label>
+          <label> <input type="radio" name="role" id="public_user" value="public_user" {% if user.role == 'public_user' %}checked{% endif %}> Public User </label>
         </div>
       </div>
 
@@ -50,12 +46,15 @@
         <button type="submit" class="btn btn-default" id="submit">
           <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Save
         </button>
+
         <a href="{{ url_for('auth.adminTools') }}" class="btn btn-default delete">
           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
         </a>
+
         <a href="{{ url_for('auth.deleteUser', user_id=user.id) }}" class="btn btn-default delete">
           <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete User
         </a>
+
       </div>
     </form>
   </div>
