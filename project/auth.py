@@ -40,7 +40,7 @@ def editUser(user_id):
             return render_template('edituser.html', User=User, user = editedUser, user_id = user_id)
 
 #Edit user details
-@auth.route('/profile/<int:user_id>/edit/', methods = ['GET', 'POST'])
+@auth.route('/profile/<int:user_id>/editdetails/', methods = ['GET', 'POST'])
 @login_required
 def editDetails(user_id):
     editedUser = db.session.query(User).filter_by(id = user_id).first()
@@ -79,7 +79,8 @@ def editDetails(user_id):
                 else:
                     new_password = request.form['new_password']
                     editedUser.password = generate_password_hash(new_password, method='sha256')
-
+                    
+            db.session.add(editedUser)
             db.session.commit() 
             flash('Account Details Successfully Updated', 'success')
             return redirect(url_for('main.profile', user_id = user_id))
