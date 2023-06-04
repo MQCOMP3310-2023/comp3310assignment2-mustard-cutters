@@ -30,13 +30,6 @@ def editUser(user_id):
     user = db.session.query(User).filter_by(id=current_user.id).first()
     if user.role == "admin":
         if request.method == 'POST':
-            if request.form['email']:
-                editedUser.email = request.form['email']
-            if request.form['name']:
-                editedUser.name = request.form['name']
-            if request.form['password']:
-                new_password = request.form['password']
-                editedUser.password = generate_password_hash(new_password, method='sha256')
             if request.form['role']:
                 editedUser.role = request.form['role']
             db.session.add(editedUser)
