@@ -62,14 +62,15 @@ def editDetails(user_id):
                     flash('Old password incorrect, please try again.', 'error')
                     return redirect(url_for('auth.editDetails', user_id = user_id))       
             if request.form['new_password']:
-                password = request.form['new_password']
+                password = request.form.get('new_password')
                 if not request.form['old_password']:
                     flash('Old Password required', 'error')
                     return redirect(url_for('auth.editDetails', user_id = user_id))
-            #Password Complexity
-            #Ref - https://stackoverflow.com/questions/16709638/checking-the-strength-of-a-password-how-to-check-conditions
-                elif not re.search(r'[A-Z]', password) or not re.search(r'\d', password) or not re.search(r"[ !#$%&'()*+,-./[\\\]^_`{|}~"+r'"]', password) or len(password) < 8:
+                #Password Complexity
+                #Ref - https://stackoverflow.com/questions/16709638/checking-the-strength-of-a-password-how-to-check-conditions
+                if not re.search(r'[A-Z]', password) or not re.search(r'\d', password) or not re.search(r"[ !#$%&'()*+,-./[\\\]^_`{|}~"+r'"]', password) or len(password) < 8:
                     flash('Password Does NOT Meet Requirements', 'error')
+                    return redirect(url_for('auth.editDetails', user_id = user_id))
                 else:
                     new_password = request.form['new_password']
                     editedUser.password = generate_password_hash(new_password, method='sha256')  

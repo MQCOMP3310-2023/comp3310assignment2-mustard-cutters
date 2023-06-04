@@ -8,14 +8,14 @@
 
 <div class = 'flash-error'>
 {% with messages = get_flashed_messages(category_filter=["error"]) %}
-{% if messages %}
+  {% if messages %}
 
-<ul>
-{% for message in messages %}
-  <li> <strong> {{ message }} </strong> </li>
-{% endfor %}
-</ul>
-{% endif %}
+    <ul>
+    {% for message in messages %}
+      <li> <strong> {{ message }} </strong> </li>
+    {% endfor %}
+    </ul>
+  {% endif %}
 {% endwith %}
 
 </div>
