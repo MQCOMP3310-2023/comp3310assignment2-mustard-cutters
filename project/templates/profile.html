@@ -6,6 +6,19 @@
   Welcome, {{ name }}!
 </h1>
 
+<div class = 'flash-error'>
+  {% with messages = get_flashed_messages(category_filter=["error"]) %}
+    {% if messages %}
+  
+      <ul>
+      {% for message in messages %}
+        <li> <strong> {{ message }} </strong> </li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  </div>
+
 <div class = 'flash'>
   {% with messages = get_flashed_messages() %}
      {% if messages %}
@@ -17,8 +30,9 @@
        </ul>
        {% endif %}
    {% endwith %}
-
 </div>
+
+
 
     <div class="col-md-4">			
       <h2>Account Details</h2>
