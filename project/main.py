@@ -62,7 +62,7 @@ def editRestaurant(restaurant_id, owner_id):
             flash('Restaurant Successfully Edited %s' % editedRestaurant.name)
             return redirect(url_for('main.showMenu', restaurant_id = restaurant_id, owner_id = owner_id))
         else:
-            return render_template('editRestaurant.html', restaurant = editedRestaurant, owner_id = owner_id, users = users)
+            return render_template('editRestaurant.html', restaurant = editedRestaurant, new_owner = editedRestaurant.owner_id, owner_id = owner_id, users = users)
     
 
 #Delete a restaurant
