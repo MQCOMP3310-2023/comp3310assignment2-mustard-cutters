@@ -16,15 +16,14 @@
 					<label for="name">Name:</label>
 					<input type="text" class="form-control" maxlength="100" name="name" value="{{ restaurant.name }}">
 					<div class="padding-bottom"></div>
-
-					<label for="owner">Owner:</label>
-					<select class="form-control" name="owner" id="owner">
-						{% for user in users %}
-							{% if user.role == 'restaurant_owner' %}
-								<option value="{{ user.id }}" {% if user.id == restaurant.owner_id %}selected{% endif %}>{{ user.name }}</option>
-							{% endif %}
-						{% endfor %}
-					</select>
+					{% if current_user.role == 'admin' %}
+						<label for="owner">Owner:</label>
+						<select class="form-control" name="owner" id="owner">
+							{% for user in users %}
+								<option value="{{ user.id }}" {% if user.id == owner_id %}selected{% endif %}>{{ user.name }}</option>
+							{% endfor %}
+						</select>
+					{% endif %}
 					
 
 					<div class="padding-bottom"></div>

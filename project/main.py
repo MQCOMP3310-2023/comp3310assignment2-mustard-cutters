@@ -44,31 +44,19 @@ def newRestaurant(owner_id):
 @main.route('/restaurant/<int:restaurant_id>/edit/<int:owner_id>/', methods = ['GET', 'POST'])
 def editRestaurant(restaurant_id, owner_id):
     editedRestaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
-    user = db.session.query(User).filter_by(role = 'restaurant_owner').order_by(asc(User.name))
+    users = User.query.filter_by(role='restaurant_owner').all()
     if request.method == 'POST':
-      if request.form['name']:
-        editedRestaurant.name = request.form['name']
+        if request.form['name']:
+            editedRestaurant.name = request.form['name']
+        if request.form['owner']:
+            editedRestaurant.owner_id = request.form['owner']
         db.session.add(editedRestaurant)
-        db.session.commit() 
+        db.session.commit()  
         flash('Restaurant Successfully Edited %s' % editedRestaurant.name)
         return redirect(url_for('main.showMenu', restaurant_id = restaurant_id, owner_id = owner_id))
     else:
-        return render_template('editRestaurant.html', restaurant = editedRestaurant, owner_id = owner_id, user = user)
+        return render_template('editRestaurant.html', restaurant = editedRestaurant, owner_id = owner_id, users = users)
     
-#change restaurant owner
-@main.route('/restaurant/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])
-@main.route('/restaurant/<int:restaurant_id>/edit/<int:owner_id>/', methods = ['GET', 'POST'])
-def changeOwner(restaurant_id):
-    new_owner = db.session.query(User).filter_by(id = restaurant_id).one()
-    if request.method == 'POST':
-      if request.form['name']:
-        new_owner.name = request.form['name']
-        db.session.add(new_owner)
-        db.session.commit() 
-        flash('Restaurant Owner Updated Successfully')
-        return redirect(url_for('main.showMenu', restaurant_id = restaurant_id))
-    else:
-        return render_template('editRestaurant.html',restaurant_id = restaurant_id)
 
 #Delete a restaurant
 @main.route('/restaurant/<int:restaurant_id>/delete/', methods = ['GET','POST'])
