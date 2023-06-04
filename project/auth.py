@@ -129,7 +129,7 @@ def signup_post():
 
     #Password Complexity
     #Ref - https://stackoverflow.com/questions/16709638/checking-the-strength-of-a-password-how-to-check-conditions
-    if not re.search(r'[A-Z]', password) or not re.search(r'\d', password) or not re.search(r"[ !#$%&'()*+,-./[\\\]^_`{|}~"+r'"]', password):
+    if not re.search(r'[A-Z]', password) or not re.search(r'\d', password) or not re.search(r"[ !#$%&'()*+,-./[\\\]^_`{|}~"+r'"]', password) or len(password) < 8:
         flash('Passwords Does NOT Meet Requirements')
 
     user = User.query.filter_by(email=email).first()
