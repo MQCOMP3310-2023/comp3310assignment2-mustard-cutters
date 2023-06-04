@@ -85,7 +85,10 @@ def deleteRestaurant(restaurant_id, owner_id):
 @main.route('/restaurant/<int:restaurant_id>/')
 @main.route('/restaurant/<int:restaurant_id>/menu/')
 def showMenu(restaurant_id):
-    existing_rating = db.session.query(Rating).filter_by(restaurant_id=restaurant_id, user_id=current_user.id).first()
+    if current_user.is_authenticated:
+        existing_rating = db.session.query(Rating).filter_by(restaurant_id=restaurant_id, user_id=current_user.id).first()
+    else:
+        existing_rating = False
     restaurant = db.session.query(Restaurant).filter_by(id = restaurant_id).one()
     items = db.session.query(MenuItem).filter_by(restaurant_id = restaurant_id).all()
     ratings = Rating.query.filter_by(restaurant_id=restaurant_id).all()
