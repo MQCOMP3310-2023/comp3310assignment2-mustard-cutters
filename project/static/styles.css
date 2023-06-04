@@ -202,31 +202,58 @@ h3 {
 	margin-top: 30px;
 }
 
-/* Rating Styling */ 
+/* Rate System Styling */
+/* Ref for Star Button Change & Hover - https://stackoverflow.com/questions/72684238/label-not-change-background-color-when-my-radio-button-checked */
+.rate {
+	display: flex;
+	margin-bottom: 20px;
+	flex-direction: row-reverse;
+}
+  
+.star-button {
+	display: none;
+}
+  
+.star-button + label {
+	font-size: 32px;
+	color: #ddd;
+	cursor: pointer;
+	margin: 0 10px;
+}
+  
+.star-button:checked ~ label {
+	color: gold;
+}
+  
+.star-button:hover ~ label {
+	color: gold;
+}
+  
+/* Rating Post*/
 .rating-list {
-	list-style: none;
-	padding: 0;
+    list-style: none;
+    padding: 0;
 }
-  
+
 .rating-item {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
-  
+
 .username {
-	font-weight: bold;
-	font-size: 20px;
-	text-transform: capitalize;
-	padding-right: 5px;
-	padding-left: 5px;
+    font-weight: bold;
+    font-size: 20px;
+    text-transform: capitalize;
+    padding-right: 5px;
+    padding-left: 5px;
 }
 
 .rating-stars {
-	color: rgb(122, 122, 122);
-	font-size: 24px;
-	padding-left: 10px;
+    color: rgb(122, 122, 122);
+    font-size: 24px;
+    padding-left: 10px;
 }
 
 .rating-stars .fas.fa-star {
-	color: gold;
-	font-size: 24px;
+    color: gold;
+    font-size: 24px;
 }
