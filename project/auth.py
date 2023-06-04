@@ -17,81 +17,91 @@ def login():
 @auth.route('/admintools')
 @login_required
 def adminTools():
-    user = db.session.query(User).order_by(asc(User.name))
-    return render_template('admintools.html', user = user)
+    user = db.session.query(User).filter_by(id=current_user.id).first()
+    if user.role == "admin":
+        user = db.session.query(User).order_by(asc(User.name))
+        return render_template('admintools.html', user = user)
 
 #Edit all user details
 @auth.route('/admintools/<int:user_id>/edit/', methods = ['GET', 'POST'])
+@login_required
 def editUser(user_id):
     editedUser = db.session.query(User).filter_by(id = user_id).first()
-    if request.method == 'POST':
-        if request.form['email']:
-            editedUser.email = request.form['email']
-        if request.form['name']:
-            editedUser.name = request.form['name']
-        if request.form['password']:
-            new_password = request.form['password']
-            editedUser.password = generate_password_hash(new_password, method='sha256')
-        if request.form['role']:
-            editedUser.role = request.form['role']
-        db.session.add(editedUser)
-        db.session.commit() 
-        flash('User Details Successfully Updated')
-        return redirect(url_for('auth.adminTools', User=User, user_id = user_id))
-    else:
-        return render_template('edituser.html', User=User, user = editedUser, user_id = user_id)
+    user = db.session.query(User).filter_by(id=current_user.id).first()
+    if user.role == "admin":
+        if request.method == 'POST':
+            if request.form['email']:
+                editedUser.email = request.form['email']
+            if request.form['name']:
+                editedUser.name = request.form['name']
+            if request.form['password']:
+                new_password = request.form['password']
+                editedUser.password = generate_password_hash(new_password, method='sha256')
+            if request.form['role']:
+                editedUser.role = request.form['role']
+            db.session.add(editedUser)
+            db.session.commit() 
+            flash('User Details Successfully Updated')
+            return redirect(url_for('auth.adminTools', User=User, user_id = user_id))
+        else:
+            return render_template('edituser.html', User=User, user = editedUser, user_id = user_id)
 
 #Edit user details
 @auth.route('/profile/<int:user_id>/edit/', methods = ['GET', 'POST'])
+@login_required
 def editDetails(user_id):
     editedUser = db.session.query(User).filter_by(id = user_id).first()
-    if request.method == 'POST':
-        if request.form['email']:
-            new_email = request.form['email']
-            user = User.query.filter_by(email=new_email).first()
-            if user and user.id != user_id: 
-                flash('Email address already exists, please choose a new one', 'error') 
-                current_app.logger.debug("User email already exists")
-                return redirect(url_for('auth.editDetails', user_id = user_id)) 
-            editedUser.email = request.form['email']
-        if request.form['name']:
-            editedUser.name = request.form['name']
-        if request.form['old_password']:
-            old_password = request.form['old_password']
-            if not check_password_hash(editedUser.password, old_password):
-                flash('Old password incorrect, please try again.', 'error')
-                return redirect(url_for('auth.editDetails', user_id = user_id))       
-        if request.form['new_password']:
-            if not request.form['old_password']:
-                flash('Old Password required', 'error')
-                return redirect(url_for('auth.editDetails', user_id = user_id))
-            else:
-                new_password = request.form['new_password']
-                editedUser.password = generate_password_hash(new_password, method='sha256')  
-        db.session.add(editedUser)
-        db.session.commit() 
-        flash('Account Details Successfully Updated', 'success')
-        return redirect(url_for('main.profile', user_id = user_id))
-    else:
-        return render_template('editdetails.html', User=User, user = editedUser, user_id = user_id)
+    if editedUser.id == current_user.id:
+        if request.method == 'POST':
+            if request.form['email']:
+                new_email = request.form['email']
+                user = User.query.filter_by(email=new_email).first()
+                if user and user.id != user_id: 
+                    flash('Email address already exists, please choose a new one', 'error') 
+                    current_app.logger.debug("User email already exists")
+                    return redirect(url_for('auth.editDetails', user_id = user_id)) 
+                editedUser.email = request.form['email']
+            if request.form['name']:
+                editedUser.name = request.form['name']
+            if request.form['old_password']:
+                old_password = request.form['old_password']
+                if not check_password_hash(editedUser.password, old_password):
+                    flash('Old password incorrect, please try again.', 'error')
+                    return redirect(url_for('auth.editDetails', user_id = user_id))       
+            if request.form['new_password']:
+                if not request.form['old_password']:
+                    flash('Old Password required', 'error')
+                    return redirect(url_for('auth.editDetails', user_id = user_id))
+                else:
+                    new_password = request.form['new_password']
+                    editedUser.password = generate_password_hash(new_password, method='sha256')  
+            db.session.add(editedUser)
+            db.session.commit() 
+            flash('Account Details Successfully Updated', 'success')
+            return redirect(url_for('main.profile', user_id = user_id))
+        else:
+            return render_template('editdetails.html', User=User, user = editedUser, user_id = user_id)
 
 #delete user
 @auth.route('/admintools/<int:user_id>/delete/', methods = ['GET', 'POST'])
+@login_required
 def deleteUser(user_id):
     userToDelete = db.session.query(User).filter_by(id = user_id).first()
-    if request.method == 'POST':
-        if userToDelete != current_user:
-            db.session.delete(userToDelete)
-            db.session.commit()
-            flash('User Successfully Deleted')
-            return redirect(url_for('auth.adminTools', User=User, user_id = user_id))
+    user = db.session.query(User).filter_by(id=current_user.id).first()
+    if user.role == "admin":
+        if request.method == 'POST':
+            if userToDelete != current_user:
+                db.session.delete(userToDelete)
+                db.session.commit()
+                flash('User Successfully Deleted')
+                return redirect(url_for('auth.adminTools', User=User, user_id = user_id))
+            else:
+                db.session.delete(userToDelete)
+                db.session.commit()
+                flash('Account Successfully Deleted')
+                return redirect(url_for('auth.logout'))
         else:
-            db.session.delete(userToDelete)
-            db.session.commit()
-            flash('Account Successfully Deleted')
-            return redirect(url_for('auth.logout'))
-    else:
-        return render_template('deleteuser.html', User=User, user = userToDelete, name=userToDelete.name)
+            return render_template('deleteuser.html', User=User, user = userToDelete, name=userToDelete.name)
 
 @auth.route('/login', methods=['POST'])
 def login_post():
