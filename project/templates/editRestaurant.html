@@ -15,26 +15,16 @@
 				<div class="form-group">
 					<label for="name">Name:</label>
 					<input type ="text" class="form-control" maxlength="100" name="name" value="{{restaurant.name }}">
-<!--
-					{% if current_user.role == 'admin'%}
-						<div class="form-group">
-							<label for="role">Owner:</label>
-							<select name="role" class="form-control" id="role">
-									<option >aaaaaaaaaaa</option>
-							</select>
-						</div>
-					{% endif %}
-					
-					{% if current_user.role == 'admin'%}
-						<div class="form-group">
-							<label for="role">Owner:</label>
-							<select name="role" class="form-control" id="role">
-								{% for value, label in User.ROLES %}
-									<option value="{{ value }}">{{ label }}</option>
-								{% endfor %}
-							</select>
-						</div>
-					{% endif %}-->
+
+					{% for user in user %}
+							<div class="row">
+								<div class="col-md-1"></div>
+									<div>
+										<h3>{{user.name}} - {{user.email}}</h3>
+									</div>
+								<div class="col-md-1"></div>
+							</div>
+					{% endfor %}					
 
 					<div class="padding-bottom"></div>
 					<button type="submit" class="btn btn-default" id="submit" type="submit">
