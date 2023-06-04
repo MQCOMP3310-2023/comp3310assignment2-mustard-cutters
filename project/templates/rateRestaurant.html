@@ -1,54 +1,53 @@
 {% extends "main.html" %}
 {% block content %}
 {% include "header.html" %}
-    <div class="row divider green">
-        <div class="col-md-12"></div>
-    </div>
-    <div class="row banner menu">
-        <div class="col-md-11 col-md-offset-1 padding-none">
-            <h1>Rate {{ restaurant.name }}</h1>
-        </div>
-    </div>
-<div class = 'flash-error'>
-		      {% with messages = get_flashed_messages(category_filter=["error"]) %}
-      {% if messages %}
-          
-        <ul>
-        {% for message in messages %}
-            <li> <strong> {{ message }} </strong> </li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-    {% endwith %}
-
+<div class="row divider green">
+    <div class="col-md-12"></div>
 </div>
-    <div class="row">
-        <div class="col-md-6 col-md-offset-1 padding-top">
-            <form action="{{ url_for('main.rateRestaurant', restaurant_id=restaurant.id, user_id = current_user.id) }}" method="post">
-                <div class="rating">
-                    <label for="star1" class="star-button">&#9733;<span>1</span></label>
-                    <input type="radio" id="star1" name="rating" value="1">
-                    <label for="star2" class="star-button">&#9733;<span>2</span></label>
-                    <input type="radio" id="star3" name="rating" value="2">
-                    <label for="star3" class="star-button">&#9733;<span>3</span></label>
-                    <input type="radio" id="star3" name="rating" value="3">
-                    <label for="star4" class="star-button">&#9733;<span>4</span></label>
-                    <input type="radio" id="star4" name="rating" value="4">
-                    <label for="star5" class="star-button">&#9733;<span>5</span></label>
-                    <input type="radio" id="star5" name="rating" value="5">
-                </div>
-
-                <a href = '{{url_for('main.showMenu', restaurant_id = restaurant.id)}}'>
-                    <button type="submit" class="btn btn-default">
-                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Submit
-                    </button>
-                </a>
-            </form>
-            <a href = '{{url_for('main.showMenu', restaurant_id = restaurant.id)}}'>
-                <button class="btn btn-default delete">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
-                </button>
-            </a>
-        </div>
+<div class="row banner menu">
+    <div class="col-md-11 col-md-offset-1 padding-none">
+        <h1>Rate {{ restaurant.name }}</h1>
     </div>
+</div>
+<div class="flash-error">
+    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+    {% if messages %}
+
+    <ul>
+        {% for message in messages %}
+        <li><strong>{{ message }}</strong></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+</div>
+<div class="row">
+    <div class="col-md-6 col-md-offset-1 padding-top">
+        <form action="{{ url_for('main.rateRestaurant', restaurant_id=restaurant.id, user_id=current_user.id) }}" method="post">
+            <div class="rate">
+              <input type="radio" id="star5" name="rating" value="5" class="star-button">
+              <label for="star5">&#9733;</label>
+              <input type="radio" id="star4" name="rating" value="4" class="star-button">
+              <label for="star4">&#9733;</label>
+              <input type="radio" id="star3" name="rating" value="3" class="star-button">
+              <label for="star3">&#9733;</label>
+              <input type="radio" id="star2" name="rating" value="2" class="star-button">
+              <label for="star2">&#9733;</label>
+              <input type="radio" id="star1" name="rating" value="1" class="star-button">
+              <label for="star1">&#9733;</label>
+            </div>
+          
+            <div class="button-group">
+              <button type="submit" class="btn btn-default">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Submit
+              </button>
+              <a href="{{ url_for('main.showMenu', restaurant_id=restaurant.id) }}">
+                <button class="btn btn-default delete">
+                  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
+                </button>
+              </a>
+            </div>
+          </form>
+    </div>
+</div>
 {% endblock %}
