@@ -5,6 +5,8 @@ from .models import User
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
+import re
+
 auth = Blueprint('auth', __name__)
 
 @auth.route('/login')
@@ -124,6 +126,11 @@ def signup_post():
     email = request.form.get('email')
     name = request.form.get('name')
     password = request.form.get('password')
+
+    #Password Complexity
+    #Ref - https://stackoverflow.com/questions/16709638/checking-the-strength-of-a-password-how-to-check-conditions
+    if not re.search(r'[A-Z]', password) or not re.search(r'\d', password) or not re.search(r"[ !#$%&'()*+,-./[\\\]^_`{|}~"+r'"]', password):
+        flash('Passwords Does NOT Meet Requirements')
 
     user = User.query.filter_by(email=email).first()
     if user: 

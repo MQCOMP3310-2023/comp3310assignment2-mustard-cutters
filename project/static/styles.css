@@ -198,6 +198,9 @@ h3 {
 	transform: scale(1.1);
 }
 
+.requirements {
+	margin-top: 10px;
+}
 
 /* Rating Styling */ 
 .rating-list {
