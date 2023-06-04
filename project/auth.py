@@ -46,6 +46,7 @@ def editDetails(user_id):
     editedUser = db.session.query(User).filter_by(id = user_id).first()
     if editedUser.id == current_user.id:
         if request.method == 'POST':
+
             if request.form['email']:
                 new_email = request.form['email']
                 user = User.query.filter_by(email=new_email).first()
@@ -54,27 +55,31 @@ def editDetails(user_id):
                     current_app.logger.debug("User email already exists")
                     return redirect(url_for('auth.editDetails', user_id = user_id)) 
                 editedUser.email = request.form['email']
-                db.session.add(editedUser)
-                db.session.commit() 
+
             if request.form['name']:
                 editedUser.name = request.form['name']
+
             if request.form['old_password']:
                 old_password = request.form['old_password']
                 if not check_password_hash(editedUser.password, old_password):
                     flash('Old password incorrect, please try again.', 'error')
-                    return redirect(url_for('auth.editDetails', user_id = user_id))       
+                    return redirect(url_for('auth.editDetails', user_id = user_id))  
+                     
             if request.form['new_password']:
                 password = request.form.get('new_password')
                 if not request.form['old_password']:
                     flash('Old Password required', 'error')
                     return redirect(url_for('auth.editDetails', user_id = user_id))
-                elif not re.search(r'[A-Z]', password) or not re.search(r'\d', password) or not re.search(r"[ !#$%&'()*+,-./[\\\]^_`{|}~"+r'"]', password) or len(password) < 8:
+                
+                #Password Complexity
+                #Ref - https://stackoverflow.com/questions/16709638/checking-the-strength-of-a-password-how-to-check-conditions
+                if not re.search(r'[A-Z]', password) or not re.search(r'\d', password) or not re.search(r"[ !#$%&'()*+,-./[\\\]^_`{|}~"+r'"]', password) or len(password) < 8:
                     flash('Password Does NOT Meet Requirements', 'error')
                     return redirect(url_for('auth.editDetails', user_id = user_id))
                 else:
                     new_password = request.form['new_password']
-                    editedUser.password = generate_password_hash(new_password, method='sha256')  
-            db.session.add(editedUser)
+                    editedUser.password = generate_password_hash(new_password, method='sha256')
+
             db.session.commit() 
             flash('Account Details Successfully Updated', 'success')
             return redirect(url_for('main.profile', user_id = user_id))
