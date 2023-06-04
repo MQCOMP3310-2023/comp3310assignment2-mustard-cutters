@@ -1,0 +1,57 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+<h2>
+  Change Details
+</h2>
+
+<div class = 'flash-error'>
+  {% with messages = get_flashed_messages(category_filter=["error"]) %}
+{% if messages %}
+
+<ul>
+{% for message in messages %}
+  <li> <strong> {{ message }} </strong> </li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+</div>
+  <div class="row">
+    <div class="col-md-6 col-md-offset-1 padding-top">
+      <form action="#" method = "post">
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type ="text" maxlength="100" class="form-control" name="email" value="{{user.email }}">
+
+          <label for="name">Name:</label>
+          <input type ="text" maxlength="100" class="form-control" name="name" value="{{user.name }}">
+
+          <h2>
+            Change Password
+          </h2>
+
+          <label for="old_password">Old Password:</label>
+          <input type ="text" maxlength="100" class="form-control" name="old_password" placeholder="Old Password">
+          
+          <label for="new_password">New Password:</label>
+          <input type ="text" maxlength="100" class="form-control" name="new_password" placeholder="New Password">
+
+          <br></br>
+
+          <button type="submit" class="btn btn-default" id="submit" type="submit">
+          <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Save</button>
+          
+      </form>
+
+      <a href = '{{url_for('main.profile', user_id = current_user.id)}}'>
+        <button class="btn btn-default delete">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel</button>
+      </a>
+    </div>
+  </div>
+
+
+{% endblock %}   

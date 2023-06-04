@@ -19,10 +19,10 @@ def publicShowRestaurants():
   return render_template('restaurants.html', restaurants = restaurants)
 
 #profile
-@main.route('/profile')
+@main.route('/profile/<int:user_id>/')
 @login_required
-def profile():
-    return render_template('profile.html', name=current_user.name)
+def profile(user_id):
+    return render_template('profile.html', name=current_user.name, user_id = user_id)
 
 #Create a new restaurant
 @main.route('/restaurant/new/', methods=['GET','POST'])
@@ -53,7 +53,21 @@ def editRestaurant(restaurant_id, owner_id):
         return redirect(url_for('main.showMenu', restaurant_id = restaurant_id, owner_id = owner_id))
     else:
         return render_template('editRestaurant.html', restaurant = editedRestaurant, owner_id = owner_id)
-
+    
+#change restaurant owner
+@main.route('/restaurant/<int:restaurant_id>/edit/', methods = ['GET', 'POST'])
+@main.route('/restaurant/<int:restaurant_id>/edit/<int:owner_id>/', methods = ['GET', 'POST'])
+def changeOwner(restaurant_id):
+    new_owner = db.session.query(User).filter_by(id = restaurant_id).one()
+    if request.method == 'POST':
+      if request.form['name']:
+        new_owner.name = request.form['name']
+        db.session.add(new_owner)
+        db.session.commit() 
+        flash('Restaurant Owner Updated Successfully')
+        return redirect(url_for('main.showMenu', restaurant_id = restaurant_id))
+    else:
+        return render_template('editRestaurant.html',restaurant_id = restaurant_id)
 
 #Delete a restaurant
 @main.route('/restaurant/<int:restaurant_id>/delete/', methods = ['GET','POST'])

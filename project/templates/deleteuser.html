@@ -1,7 +1,12 @@
 {% extends "main.html" %}
 {% block content %}
 {% include "header.html" %}
-<h2> Are you sure you want to delete {{user.name}}? </h2>
+
+{% if current_user == user %}
+	<h2> Are you sure you want to delete your account? </h2>
+{% else %}
+	<h2> Are you sure you want to delete the account of {{name}}? </h2>
+{% endif %}
 
 <form action="#" method = 'post'>
 
@@ -10,9 +15,13 @@
 
 </form>
 
-<a href = '{{url_for('auth.adminTools')}}'>
-	<button class="btn btn-default delete">
-	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel</button>
-</a>
+{% if current_user == user %}
+	<a href = '{{url_for('main.profile', user_id = current_user.id)}}'></a>
+{% else %}
+	<a href = '{{url_for('auth.editUser', user_id = user.id)}}'>
+{% endif %}
+		<button class="btn btn-default delete">
+		<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel</button>
+	</a>
 
 {% endblock %}
