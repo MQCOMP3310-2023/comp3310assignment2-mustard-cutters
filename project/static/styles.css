@@ -173,6 +173,30 @@ h3 {
 	text-align: center;
 }
 
+/* Header Styling */ 
+.top-menu {
+	background-color: #c5effa;
+	padding: 10px;
+  }
+  
+  .link {
+	margin-top: 20px;
+	display: inline-block;
+	margin-right: 10px;
+	padding: 5px 10px;
+	color: black;
+	text-decoration: none;
+	transition: color 0.3s ease-in-out;
+  }
+  
+  .link:hover {
+	color: #ffffff;
+	background-color: #333;
+	transform: scale(1.1);
+  }
+
+
+/* Rating Styling */ 
 .rating-list {
 	list-style: none;
 	padding: 0;
