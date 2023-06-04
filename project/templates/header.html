@@ -1,43 +1,42 @@
-
 <div class="row top-menu">
-{% if current_user.role == 'restaurant_owner' or  current_user.role == 'admin' %}
-	<div class="col-md-6">
-		<a href="{{url_for('main.showRestaurants', owner_id = current_user.id)}}">
-			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Restaurants
+	{% if current_user.role == 'restaurant_owner' or current_user.role == 'admin' %}
+	  <div class="col-md-6">
+		<a href="{{url_for('main.showRestaurants', owner_id=current_user.id)}}" class="link">
+		  <span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Restaurants
 		</a>
-	</div>
-{% endif %}
-{% if not current_user.is_authenticated or current_user.role == 'public_user'%}
-	<div class="col-md-6">
-		<a href="{{url_for('main.publicShowRestaurants')}}">
-			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Restaurants
+	  </div>
+	{% endif %}
+	{% if not current_user.is_authenticated or current_user.role == 'public_user' %}
+	  <div class="col-md-6">
+		<a href="{{url_for('main.publicShowRestaurants')}}" class="link">
+		  <span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Restaurants
 		</a>
-	</div>
-{% endif %}
+	  </div>
+	{% endif %}
 	<div class="col-md-6 text-right">
-{% if current_user.role == 'admin' %}
-		<a href="{{ url_for('auth.adminTools') }}">
-			<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>Admin Tools
+	  {% if current_user.role == 'admin' %}
+		<a href="{{ url_for('auth.adminTools') }}" class="link">
+		  <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>Admin Tools
 		</a>
-{% endif %}
-{% if current_user.is_authenticated %}
-		<a href="{{ url_for('main.profile', user_id = current_user.id) }}">
-			<span class="glyphicon glyphicon-user" aria-hidden="true"></span>Profile
+	  {% endif %}
+	  {% if current_user.is_authenticated %}
+		<a href="{{ url_for('main.profile', user_id=current_user.id) }}" class="link">
+		  <span class="glyphicon glyphicon-user" aria-hidden="true"></span>Profile
 		</a>
-{% endif %}
-{% if not current_user.is_authenticated %}
-		<a href="{{ url_for('auth.login') }}">
-			<span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>Login
+	  {% endif %}
+	  {% if not current_user.is_authenticated %}
+		<a href="{{ url_for('auth.login') }}" class="link">
+		  <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>Login
 		</a>
-		<a href="{{ url_for('auth.signup') }}">
-			<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>Signup
+		<a href="{{ url_for('auth.signup') }}" class="link">
+		  <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>Signup
 		</a>
-{% endif %}
-{% if current_user.is_authenticated %}
-		<a href="{{ url_for('auth.logout') }}">
-			<span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>Logout
+	  {% endif %}
+	  {% if current_user.is_authenticated %}
+		<a href="{{ url_for('auth.logout') }}" class="link">
+		  <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>Logout
 		</a>
-{% endif %}
-		
+	  {% endif %}
 	</div>
-</div>
+  </div>
+  
